@@ -1240,6 +1240,15 @@ function enterApp(user) {
   const app = document.getElementById('app');
   app.style.display = 'flex';
   app.style.flexDirection = 'column';
+
+  // Navigate to dashboard by default
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+  const dashPage = document.getElementById('page-dashboard');
+  const dashBtn = document.getElementById('nav-dashboard');
+  if (dashPage) dashPage.classList.add('active');
+  if (dashBtn) dashBtn.classList.add('active');
+
   const bar = document.getElementById('action-bar');
   const barInner = document.getElementById('action-bar-inner');
   if (bar) {
@@ -1247,19 +1256,14 @@ function enterApp(user) {
     if (barInner) barInner.innerHTML = `<button class="btn-primary" style="flex:1" onclick="openMovementModal('compra')">+ Compras</button><button class="btn-secondary" style="flex:1" onclick="openMovementModal('venta')">- Ventas</button>`;
   }
   if (!user) {
-    // Demo mode — empty state
     loadPerfil();
     renderDashboard();
     renderInventario();
     return;
   }
-  // Real user — load from Supabase
   showLoading('Cargando tus datos...');
   loadAllData().then(() => {
     hideLoading();
-    if (products.length === 0 && movements.length === 0) {
-      // New user — no demo data, just empty state
-    }
     loadPerfil();
     renderDashboard();
     renderInventario();
